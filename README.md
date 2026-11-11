@@ -1,7 +1,49 @@
-# Companion — Local-First AI Companion (re-engineered concept)
+# Companion — Local-First AI Companion
+
+[![CI](https://github.com/OWNER/companion-app/actions/workflows/ci.yml/badge.svg)](https://github.com/OWNER/companion-app/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org)
+
+> Own your AI. Local LLM + persistent memory + privacy vault + network toggles + level progression.
+> Inspired by the "own your AI" idea, implemented from scratch.
 
 A browser/desktop-ready companion app inspired by the "own your AI" idea:
 local LLM + persistent memory + privacy vault + network toggles + level progression.
+
+## Demo
+
+```
+┌─────────────────────────────────────────────┐
+│  Companion  v0.1.0 · S2 Perceptive          │
+├─────────────────────────────────────────────┤
+│  Chat  │  Memory  │  Vault  │  Network ...  │
+├─────────────────────────────────────────────┤
+│  You: I like local AI and coffee.           │
+│  AIB: Noted. I'll remember that.            │
+│                                             │
+│  Memory panel:                              │
+│   #1 [fact] User likes local AI and coffee. │
+│   #2 [insight] User prefers local-first.    │
+└─────────────────────────────────────────────┘
+```
+
+## Feature matrix
+
+| Area | Status |
+|---|---|
+| Streaming chat (Ollama/Anthropic/Gemini) | ✅ |
+| Persistent memory + semantic search | ✅ |
+| Editable memory panel | ✅ |
+| Vault (API keys, local) | ✅ |
+| Network allow-list + air-gap | ✅ |
+| Guardian (prompt-injection scan) | ✅ |
+| Tool registry + approval | ✅ |
+| Document ingestion + RAG (Oracle) | ✅ |
+| Scheduler + Dreaming consolidation | ✅ |
+| Level unlock system (18 levels) | ✅ |
+| Voice I/O (Echo) | 🔜 |
+| Device sync (Twin) | 🔜 |
+| Desktop installer (Tauri) | 🔜 |
 
 ## Run (browser mode)
 ```

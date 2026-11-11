@@ -1,20 +1,33 @@
 import json
 import time
-import numpy as np
-from sentence_transformers import SentenceTransformer
 
 import db
 
 _model = None
+_ST_AVAILABLE = None
+
+def _st_available():
+    global _ST_AVAILABLE
+    if _ST_AVAILABLE is None:
+        try:
+            import sentence_transformers  # noqa
+            _ST_AVAILABLE = True
+        except Exception:
+            _ST_AVAILABLE = False
+    return _ST_AVAILABLE
 
 def _embedder():
     global _model
-    if _model is None:
+    if _model is None and _st_available():
+        from sentence_transformers import SentenceTransformer
         _model = SentenceTransformer("all-MiniLM-L6-v2")
     return _model
 
 def embed(text):
+    if not _st_available():
+        return None
     try:
+        import numpy as np
         v = _embedder().encode(text, normalize_embeddings=True)
         return v.astype("float32").tobytes()
     except Exception:
@@ -61,26 +74,27 @@ def search(query, k=6):
     if not rows:
         return []
     # embedding similarity if available
+    if not _st_available():
+        scored = sorted(rows, key=lambda r: _keyword_score(query, r["content"]), reverse=True)
+        return scored[:k]
     try:
+        import numpy as np
         qv = _embedder().encode(query, normalize_embeddings=True).astype("float32")
         scored = []
         c = db.conn()
         for r in rows:
             row = c.execute("SELECT embedding FROM memory WHERE id=?", (r["id"],)).fetchone()
-            c2 = None
             emb = row["embedding"] if row else None
             if emb:
                 v = np.frombuffer(emb, dtype="float32")
                 score = float(np.dot(qv, v))
             else:
-                # keyword fallback
                 score = _keyword_score(query, r["content"])
             scored.append((score, r))
         c.close()
         scored.sort(key=lambda x: x[0], reverse=True)
         return [r for _, r in scored[:k]]
     except Exception:
-        # keyword fallback
         scored = sorted(rows, key=lambda r: _keyword_score(query, r["content"]), reverse=True)
         return scored[:k]
 
