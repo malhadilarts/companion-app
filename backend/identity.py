@@ -16,12 +16,13 @@ def _gen_keypair():
 
 def create(name):
     pub, priv = _gen_keypair()
-    db.conn().execute(
+    c = db.conn()
+    c.execute(
         "INSERT OR REPLACE INTO identity(id,name,pubkey,privkey,created_at,registered) VALUES (1,?,?,?,?,0)",
         (name, pub, priv, time.time()),
     )
-    db.conn().commit()
-    db.conn().close()
+    c.commit()
+    c.close()
     return {"name": name, "pubkey": pub, "created_at": time.time()}
 
 def get():

@@ -9,10 +9,11 @@ def allowed(ep):
     return bool(r and r["allowed"])
 
 def set_allowed(ep, val):
-    db.conn().execute("INSERT INTO network(endpoint,allowed) VALUES (?,?) ON CONFLICT(endpoint) DO UPDATE SET allowed=excluded.allowed",
-                      (ep, int(val)))
-    db.conn().commit()
-    db.conn().close()
+    c = db.conn()
+    c.execute("INSERT INTO network(endpoint,allowed) VALUES (?,?) ON CONFLICT(endpoint) DO UPDATE SET allowed=excluded.allowed",
+              (ep, int(val)))
+    c.commit()
+    c.close()
 
 def all_status():
     c = db.conn()

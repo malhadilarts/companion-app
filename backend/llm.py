@@ -6,8 +6,12 @@ import network
 import vault
 
 def chat_stream(messages, model=None, on_token=None):
+    for tok in stream_tokens(messages, model=model):
+        if on_token:
+            on_token(tok)
+
+def stream_tokens(messages, model=None):
     model = model or DEFAULT_MODEL
-    # airgap check: ollama local always allowed
     if not network.allowed("ollama"):
         raise RuntimeError("Ollama endpoint disabled in network settings")
     payload = {"model": model, "messages": messages, "stream": True}
@@ -23,10 +27,9 @@ def chat_stream(messages, model=None, on_token=None):
                 obj = json.loads(line)
             except Exception:
                 continue
-            msg = obj.get("message", {})
-            tok = msg.get("content", "")
-            if tok and on_token:
-                on_token(tok)
+            tok = obj.get("message", {}).get("content", "")
+            if tok:
+                yield tok
             if obj.get("done"):
                 break
 

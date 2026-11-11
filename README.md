@@ -47,7 +47,7 @@ local LLM + persistent memory + privacy vault + network toggles + level progress
 
 ## Run (browser mode)
 ```
-cd companion-app/backend
+cd backend
 python -m uvicorn main:app --host 127.0.0.1 --port 7870
 ```
 Open http://127.0.0.1:7870
