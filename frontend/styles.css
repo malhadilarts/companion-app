@@ -29,3 +29,4 @@ pre { background:var(--panel); padding:.6rem; border-radius:6px; overflow:auto; 
 .badge { display:inline-block; padding:.15rem .5rem; border-radius:4px; font-size:.75rem; background:#2a2f40; }
 .badge.unlocked { background:#1f6f4a; }
 .badge.locked { background:#5a2a2a; }
+.badge.inuse { background:#3a2f5c; border:1px solid #7c5cff; color:#c9bfff; }

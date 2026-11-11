@@ -31,6 +31,9 @@ async function refreshStatus() {
   try {
     const s = await api("/api/status");
     $("statusLine").textContent = `${s.app} v${s.version} · ${s.current_level} · model: ${s.model}`;
+    if (s.last_used) {
+      $("inUseBadge").textContent = `in use: ${s.last_used.model} · ${s.last_used.endpoint}`;
+    }
   } catch (e) { $("statusLine").textContent = "offline"; }
 }
 refreshStatus();
@@ -72,6 +75,7 @@ $("sendBtn").onclick = async () => {
       }
     }
   } catch (e) { appendMsg("assistant", "Error: " + e.message); }
+  refreshStatus();
 };
 
 function appendMsg(role, text) {

@@ -75,6 +75,11 @@ def status():
         "identity": ident,
         "current_level": db.current_level(),
         "airgap": network.airgap(),
+        "last_used": {
+            "provider": db.get_setting("last_provider", "ollama"),
+            "model": db.get_setting("last_model", config.DEFAULT_MODEL),
+            "endpoint": db.get_setting("last_endpoint", "ollama"),
+        },
     }
 
 @app.post("/api/chat")
@@ -97,6 +102,14 @@ def chat(req: ChatReq):
         req.use_tools = False
 
     full = {"buf": []}
+
+    # record in-use model/endpoint
+    _provider = req.provider
+    _model = req.model or config.DEFAULT_MODEL
+    _endpoint = _provider  # ollama/anthropic/gemini map to endpoints
+    db.set_setting("last_provider", _provider)
+    db.set_setting("last_model", _model)
+    db.set_setting("last_endpoint", _endpoint)
 
     def gen():
         try:
