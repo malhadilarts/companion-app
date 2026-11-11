@@ -1,0 +1,31 @@
+:root { --bg:#0f1115; --panel:#161a22; --accent:#7c5cff; --text:#e6e9ef; --muted:#8a93a6; --border:#232838; }
+* { box-sizing:border-box; }
+body { margin:0; font-family:system-ui,Segoe UI,Roboto,sans-serif; background:var(--bg); color:var(--text); }
+header { display:flex; align-items:center; gap:1rem; padding:1rem; border-bottom:1px solid var(--border); flex-wrap:wrap; }
+header h1 { margin:0; font-size:1.4rem; }
+.muted { color:var(--muted); font-size:.9rem; }
+nav#tabs { display:flex; gap:.4rem; flex-wrap:wrap; }
+nav#tabs button { background:var(--panel); color:var(--text); border:1px solid var(--border); padding:.4rem .8rem; border-radius:6px; cursor:pointer; }
+nav#tabs button.active { background:var(--accent); border-color:var(--accent); }
+main { padding:1rem; max-width:1100px; margin:0 auto; }
+.tab { display:none; }
+.tab.active { display:block; }
+.row { display:flex; gap:.5rem; align-items:center; flex-wrap:wrap; margin:.6rem 0; }
+input, textarea, select { background:var(--panel); color:var(--text); border:1px solid var(--border); padding:.5rem; border-radius:6px; }
+button { background:var(--accent); color:#fff; border:none; padding:.5rem 1rem; border-radius:6px; cursor:pointer; }
+button.secondary { background:var(--panel); border:1px solid var(--border); }
+.list { margin-top:.6rem; }
+.card { background:var(--panel); border:1px solid var(--border); padding:.7rem; border-radius:8px; margin:.4rem 0; }
+.card .meta { color:var(--muted); font-size:.8rem; }
+.chatlog { background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:1rem; min-height:300px; max-height:60vh; overflow:auto; }
+.msg { margin:.5rem 0; }
+.msg.user { color:#b8c4ff; }
+.msg.assistant { color:var(--text); }
+.msg .role { font-weight:600; font-size:.8rem; color:var(--muted); }
+.chatbar { display:flex; gap:.5rem; margin-top:.6rem; flex-wrap:wrap; }
+.chatbar input { flex:1; min-width:200px; }
+pre { background:var(--panel); padding:.6rem; border-radius:6px; overflow:auto; max-height:300px; }
+.hidden { display:none; }
+.badge { display:inline-block; padding:.15rem .5rem; border-radius:4px; font-size:.75rem; background:#2a2f40; }
+.badge.unlocked { background:#1f6f4a; }
+.badge.locked { background:#5a2a2a; }

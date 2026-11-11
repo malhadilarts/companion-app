@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Companion</title>
+<link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<header>
+  <h1>Companion</h1>
+  <span id="statusLine" class="muted">loading…</span>
+  <nav id="tabs">
+    <button data-tab="chat" class="active">Chat</button>
+    <button data-tab="memory">Memory</button>
+    <button data-tab="vault">Vault</button>
+    <button data-tab="network">Network</button>
+    <button data-tab="tools">Tools</button>
+    <button data-tab="docs">Oracle</button>
+    <button data-tab="levels">Levels</button>
+    <button data-tab="settings">Settings</button>
+  </nav>
+</header>
+
+<main>
+  <!-- CHAT -->
+  <section id="tab-chat" class="tab active">
+    <div id="chatLog" class="chatlog"></div>
+    <div class="chatbar">
+      <select id="providerSel"><option value="ollama">Ollama</option><option value="anthropic">Anthropic</option><option value="gemini">Gemini</option></select>
+      <input id="modelInput" placeholder="model (optional)" />
+      <label><input type="checkbox" id="useMemory" checked> memory</label>
+      <label><input type="checkbox" id="useTools"> tools</label>
+      <input id="msgInput" placeholder="Message…" />
+      <button id="sendBtn">Send</button>
+    </div>
+  </section>
+
+  <!-- MEMORY -->
+  <section id="tab-memory" class="tab">
+    <h2>Memory</h2>
+    <div class="row">
+      <input id="memContent" placeholder="New fact / insight…" />
+      <select id="memKind"><option>fact</option><option>insight</option><option>episode</option></select>
+      <label><input type="checkbox" id="memPinned"> pinned</label>
+      <button id="memAdd">Add</button>
+    </div>
+    <div id="memList" class="list"></div>
+  </section>
+
+  <!-- VAULT -->
+  <section id="tab-vault" class="tab">
+    <h2>Vault (API keys, stored locally)</h2>
+    <div class="row">
+      <select id="vaultProvider"><option>anthropic</option><option>gemini</option></select>
+      <input id="vaultKey" type="password" placeholder="API key" />
+      <button id="vaultSet">Save</button>
+    </div>
+    <div id="vaultList" class="list"></div>
+  </section>
+
+  <!-- NETWORK -->
+  <section id="tab-network" class="tab">
+    <h2>Network</h2>
+    <label><input type="checkbox" id="airgapToggle"> Air-gap (block all outbound)</label>
+    <div id="netList" class="list"></div>
+  </section>
+
+  <!-- TOOLS -->
+  <section id="tab-tools" class="tab">
+    <h2>Tools</h2>
+    <div id="toolsList" class="list"></div>
+    <h3>Run a tool</h3>
+    <div class="row">
+      <select id="toolSel"></select>
+      <input id="toolArgs" placeholder='{"path":"."}' />
+      <button id="toolRun">Run</button>
+    </div>
+    <pre id="toolOut"></pre>
+  </section>
+
+  <!-- ORACLE / DOCS -->
+  <section id="tab-docs" class="tab">
+    <h2>Oracle — your documents</h2>
+    <div class="row">
+      <input id="docName" placeholder="name" />
+      <textarea id="docContent" placeholder="paste document text…" rows="6"></textarea>
+      <button id="docAdd">Ingest</button>
+    </div>
+    <div id="docList" class="list"></div>
+    <div class="row">
+      <input id="docQuery" placeholder="search…" />
+      <button id="docSearch">Search</button>
+    </div>
+    <div id="docResults" class="list"></div>
+  </section>
+
+  <!-- LEVELS -->
+  <section id="tab-levels" class="tab">
+    <h2>Levels</h2>
+    <div id="levelsList" class="list"></div>
+  </section>
+
+  <!-- SETTINGS -->
+  <section id="tab-settings" class="tab">
+    <h2>Settings</h2>
+    <div class="row"><label>Companion name</label><input id="setName" /></div>
+    <div class="row"><label>Guardian</label><input type="checkbox" id="setGuardian" /></div>
+    <button id="saveSettings">Save</button>
+    <button id="backupBtn">Backup DB</button>
+    <pre id="settingsOut"></pre>
+  </section>
+</main>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
