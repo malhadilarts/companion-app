@@ -105,15 +105,13 @@ def chat(req: ChatReq):
                     full["buf"].append(tok)
                     yield "data: " + json.dumps({"token": tok}) + "\n\n"
             elif req.provider == "anthropic":
-                out = llm.anthropic_chat(msgs, model=req.model or "claude-sonnet-4-5")
-                full["buf"].append(out)
-                for i in range(0, len(out), 40):
-                    yield "data: " + json.dumps({"token": out[i:i+40]}) + "\n\n"
+                for tok in llm.anthropic_stream(msgs, model=req.model or "claude-sonnet-4-5"):
+                    full["buf"].append(tok)
+                    yield "data: " + json.dumps({"token": tok}) + "\n\n"
             elif req.provider == "gemini":
-                out = llm.gemini_chat(msgs, model=req.model or "gemini-2.0-flash")
-                full["buf"].append(out)
-                for i in range(0, len(out), 40):
-                    yield "data: " + json.dumps({"token": out[i:i+40]}) + "\n\n"
+                for tok in llm.gemini_stream(msgs, model=req.model or "gemini-2.0-flash"):
+                    full["buf"].append(tok)
+                    yield "data: " + json.dumps({"token": tok}) + "\n\n"
             else:
                 yield "data: " + json.dumps({"error": "unknown provider"}) + "\n\n"
                 return
@@ -262,14 +260,7 @@ def docs_add(req: DocReq):
 
 @app.delete("/api/documents/{did}")
 def docs_del(did: int):
-    c = db.conn()
-    row = c.execute("SELECT name FROM documents WHERE id=?", (did,)).fetchone()
-    name = row["name"] if row else None
-    c.execute("DELETE FROM documents WHERE id=?", (did,))
-    if name:
-        c.execute("DELETE FROM memory WHERE source=? AND kind='document'", (name,))
-    c.commit()
-    c.close()
+    rag.delete_doc(did)
     return {"ok": True}
 
 @app.get("/api/documents/search")

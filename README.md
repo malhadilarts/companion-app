@@ -72,6 +72,13 @@ Bonus: B1 Dreaming, B2 Echo, B3 Mirror, B4 Forge, B5 Sanctuary, B6 Twin, B7 Orac
 Wrap the FastAPI backend + frontend in Tauri or Electron. The backend is a
 standard ASGI app; spawn it as a sidecar process on app start.
 
+## Caveats (honest)
+- **Identity is local-only.** Signatures use HMAC-SHA256 with a local key. There is no asymmetric crypto (Ed25519/RSA) without extra dependencies, so identities are *not* publicly verifiable. Treat as a local label, not a CA.
+- **Vault is obfuscation, not a secret store.** Keys are XOR+PBKDF2 protected at rest. For real security, swap in OS keyring (`keyring` package).
+- **Air-gap is app-level.** It blocks the app's outbound calls, but cannot stop the OS or other processes. Use an OS firewall for a true offline guarantee.
+- **Guardian is pattern-based** and should be treated as a layer, not a guarantee.
+- Voice (Echo) and device sync (Twin) are slots awaiting implementation.
+
 ## Legal note
 This is an original implementation of a *concept*. It does not copy any third-party
 code, branding, or trademarks. If you commercialize, get a freedom-to-operate

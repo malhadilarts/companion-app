@@ -40,14 +40,21 @@ def register(code):
     c.close()
 
 def sign(message):
-    ident = get()
-    if not ident:
-        return None
-    import hmac
-    sig = hmac.new(ident["privkey"].encode() if False else b"", message.encode(), hashlib.sha256).hexdigest()
-    # privkey not in get(); fetch directly
+    """Local-only HMAC signature (NOT publicly verifiable - no asymmetric crypto available).
+    Returns HMAC-SHA256(privkey, message). For public verification you'd need Ed25519/RSA
+    (requires the 'cryptography' package, not installed)."""
     c = db.conn()
     r = c.execute("SELECT privkey FROM identity WHERE id=1").fetchone()
     c.close()
-    sig = hashlib.sha256((r["privkey"] + message).encode()).hexdigest()
-    return sig
+    if not r:
+        return None
+    import hmac
+    return hmac.new(r["privkey"].encode("utf-8"), message.encode("utf-8"), hashlib.sha256).hexdigest()
+
+def verify(message, signature):
+    """Local verification only."""
+    expected = sign(message)
+    if expected is None:
+        return False
+    import hmac
+    return hmac.compare_digest(expected, signature)

@@ -3,12 +3,16 @@ import db
 ENDPOINTS = ["ollama", "anthropic", "gemini", "web", "registry"]
 
 def allowed(ep):
+    if airgap() and ep != "ollama":
+        return False
     c = db.conn()
     r = c.execute("SELECT allowed FROM network WHERE endpoint=?", (ep,)).fetchone()
     c.close()
     return bool(r and r["allowed"])
 
 def set_allowed(ep, val):
+    if airgap() and ep != "ollama":
+        val = False
     c = db.conn()
     c.execute("INSERT INTO network(endpoint,allowed) VALUES (?,?) ON CONFLICT(endpoint) DO UPDATE SET allowed=excluded.allowed",
               (ep, int(val)))
